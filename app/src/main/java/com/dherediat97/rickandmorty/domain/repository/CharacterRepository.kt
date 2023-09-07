@@ -11,6 +11,11 @@ class CharacterRepository {
         return responseGetAllCharacters.results
     }
 
+    suspend fun searchCharacters(name: String): List<Character> {
+        val responseSearchCharacters = rickMortyApiService.searchCharacter(name)
+        return responseSearchCharacters.results
+    }
+
     suspend fun getCharacter(id: Int): Character {
         return rickMortyApiService.getCharacter(id)
     }

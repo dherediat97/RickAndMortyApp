@@ -15,7 +15,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.unit.dp
-import com.dherediat97.rickandmorty.presentation.characterdetail.CharacterCard
 import com.dherediat97.rickandmorty.presentation.error.ErrorComposableView
 import com.dherediat97.rickandmorty.presentation.loading.LoadingComposableView
 import kotlinx.coroutines.flow.distinctUntilChanged

@@ -17,11 +17,18 @@ class CharacterListViewModel : ViewModel() {
     val uiState: StateFlow<CharacterListUiState>
         get() = _state
 
-    private suspend fun fetchCharacters() {
+
+    private val _searchState = MutableStateFlow(CharacterSearchUiState())
+    val searchUiState: StateFlow<CharacterSearchUiState>
+        get() = _searchState
+
+    private suspend fun fetchCharacters(page: Int) {
         runCatching {
             _state.update { it.copy(isLoading = true) }
-            val characters = repository.getAllCharacters(page = _state.value.page)
-            _state.update { it.copy(characters = _state.value.characters + characters, isLoading = false) }
+            val characters = repository.getAllCharacters(page = page)
+            _state.update {
+                it.copy(characters = if (page == 1) characters else _state.value.characters + characters, isLoading = false)
+            }
         }.onFailure {
             _state.update { it.copy(error = true) }
         }
@@ -30,16 +37,29 @@ class CharacterListViewModel : ViewModel() {
     fun fetchCharactersFirstTime() {
         viewModelScope.launch(Dispatchers.IO) {
             if (_state.value.characters.isEmpty()) {
-                fetchCharacters()
+                fetchCharacters(1)
             }
         }
     }
 
     fun fetchCharacterPaginated() {
         viewModelScope.launch(Dispatchers.IO) {
-            fetchCharacters()
+            fetchCharacters(_state.value.page)
         }
     }
+
+    fun searchCharacter(name: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            _searchState.update { it.copy(characters = emptyList()) }
+            runCatching {
+                val characters = repository.searchCharacters(name)
+                _searchState.update { it.copy(characters = characters) }
+            }.onFailure {
+                _searchState.update { it.copy(error = true) }
+            }
+        }
+    }
+
 
     data class CharacterListUiState(
         val characters: List<Character> = emptyList(),
@@ -47,5 +67,11 @@ class CharacterListViewModel : ViewModel() {
         val error: Boolean = false,
         var page: Int = 1,
         var isEndReached: Boolean = false
+    )
+
+    data class CharacterSearchUiState(
+        var characters: List<Character> = emptyList(),
+        val isLoading: Boolean = false,
+        val error: Boolean = false
     )
 }
