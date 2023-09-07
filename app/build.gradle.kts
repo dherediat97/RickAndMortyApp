@@ -11,7 +11,8 @@ android {
     defaultConfig {
         applicationId = "com.dherediat97.rickandmorty"
         minSdk = 24
-        targetSdk = 33
+        //noinspection EditedTargetSdkVersion
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -23,7 +24,7 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -59,11 +60,13 @@ dependencies {
     implementation(libs.ui)
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
+    implementation(libs.icons.extended)
     implementation(libs.material3)
     implementation(libs.koin.core)
     implementation(libs.koin.androidx.compose)
     implementation(libs.coil)
     implementation(libs.retrofit)
+    implementation(libs.okHttpLoggingInterceptor)
     implementation(libs.retrofitConverterGson)
     implementation(libs.lottie)
     testImplementation(libs.junit)
