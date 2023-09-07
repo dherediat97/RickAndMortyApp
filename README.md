@@ -11,8 +11,9 @@
   <h3 align="center">RickAndMortyApp</h3>
 
   <p align="center">
-    An app that show the character list of the TV Animated Series Rick & Morty
+    An app that show the characters list of the TV Animated Series Rick & Morty
     <br />
+    This app provides a filter for search any character by name, status(Alive, Dead, Unknown), gender and specie
   </p>
 </div>
 
