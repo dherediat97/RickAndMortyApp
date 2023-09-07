@@ -13,14 +13,26 @@ interface RickMortyApiService {
                                  page: Int): ResponseGetAllCharacters
 
     @GET("character/{id}")
-    suspend fun getCharacter(@Path("id") id: Int): Character
+    suspend fun getCharacter(@Path("id")
+                             id: Int): Character
 
     @GET("character")
-    suspend fun searchCharacter(@Query("name") name: String): ResponseGetAllCharacters
+    suspend fun searchCharacter(
+        @Query("name")
+        name: String,
+        @Query("species")
+        species: String,
+        @Query("status")
+        status: String,
+        @Query("gender")
+        gender: String,
+    ): ResponseGetAllCharacters
 
     @GET("episode/{episodes}")
-    suspend fun getEpisodes(@Path("episodes") episodes: String): List<Episode>
+    suspend fun getEpisodes(@Path("episodes")
+                            episodes: String): List<Episode>
 
     @GET("episode/{episode}")
-    suspend fun getEpisode(@Path("episode") episode: String): Episode
+    suspend fun getEpisode(@Path("episode")
+                           episode: String): Episode
 }

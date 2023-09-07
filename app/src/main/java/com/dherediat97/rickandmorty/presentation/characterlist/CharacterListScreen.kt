@@ -1,5 +1,6 @@
 package com.dherediat97.rickandmorty.presentation.characterlist
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
@@ -14,9 +15,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshotFlow
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
+import com.dherediat97.rickandmorty.presentation.ScaleAndAlphaArgs
+import com.dherediat97.rickandmorty.presentation.calculateDelayAndEasing
 import com.dherediat97.rickandmorty.presentation.error.ErrorComposableView
 import com.dherediat97.rickandmorty.presentation.loading.LoadingComposableView
+import com.dherediat97.rickandmorty.presentation.scaleAndAlpha
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.androidx.compose.koinViewModel
 
@@ -35,19 +41,23 @@ fun CharacterListScreen(viewModel: CharacterListViewModel = koinViewModel(), onN
         viewModel.fetchCharacterPaginated()
     })
 
-    if (data.error && data.characters.isEmpty()) ErrorComposableView()
+    if (data.error) ErrorComposableView()
 
 
     if (!data.isLoading) {
         val items by remember { mutableStateOf(data.characters) }
         LazyVerticalGrid(state = listState, columns = GridCells.Adaptive(128.dp), contentPadding = PaddingValues(
             start = 8.dp,
-            top = 16.dp,
+            top = 8.dp,
             end = 8.dp,
-            bottom = 16.dp
+            bottom = 8.dp
         ), content = {
-            itemsIndexed(items = items, key = { _, character -> character.id }) { _, character ->
-                CharacterCard(character) {
+            itemsIndexed(items = items, key = { _, character -> character.id }) { index, character ->
+                val (delay, easing) = listState.calculateDelayAndEasing(index, 1)
+                val animation = tween<Float>(durationMillis = 50, delayMillis = delay, easing = easing)
+                val args = ScaleAndAlphaArgs(fromScale = 2f, toScale = 1f, fromAlpha = 0f, toAlpha = 1f)
+                val (scale, alpha) = scaleAndAlpha(args = args, animation = animation)
+                CharacterCard(modifier = Modifier.graphicsLayer(alpha = alpha, scaleX = scale, scaleY = scale), character) {
                     onNavigateCharacter(character.id)
                 }
             }

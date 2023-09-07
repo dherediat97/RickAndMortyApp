@@ -48,15 +48,16 @@ class CharacterListViewModel : ViewModel() {
         }
     }
 
-    fun searchCharacter(name: String) {
+    fun searchCharacter(name: String, specie: String, status: String, gender: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            _searchState.update { it.copy(characters = emptyList()) }
+            _searchState.update { it.copy(isLoading = true) }
             runCatching {
-                val characters = repository.searchCharacters(name)
+                val characters = repository.searchCharacters(name, specie, status, gender)
                 _searchState.update { it.copy(characters = characters) }
             }.onFailure {
-                _searchState.update { it.copy(error = true) }
+                _searchState.update { it.copy(error = true, characters = emptyList()) }
             }
+            _searchState.update { it.copy(isLoading = false) }
         }
     }
 
@@ -72,6 +73,7 @@ class CharacterListViewModel : ViewModel() {
     data class CharacterSearchUiState(
         var characters: List<Character> = emptyList(),
         val isLoading: Boolean = false,
-        val error: Boolean = false
+        val error: Boolean = false,
+        var isSearchbarActive: Boolean = false
     )
 }
