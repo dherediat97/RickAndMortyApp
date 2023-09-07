@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.dherediat97.rickandmorty.domain.model.Character
+import com.dherediat97.rickandmorty.domain.model.CharacterStatus
 import com.dherediat97.rickandmorty.ui.theme.Red
 import java.util.Locale
 
@@ -41,8 +42,8 @@ fun CharacterCard(character: Character, onNavigateCharacter: (Int) -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 style = TextStyle(fontSize = 16.sp, color =
                 when (character.status) {
-                    "Alive" -> Color.Green
-                    "Dead" -> Red
+                    CharacterStatus.Alive.name -> Color.Green
+                    CharacterStatus.Dead.name -> Red
                     else -> Color.White
                 }),
                 textAlign = TextAlign.Center

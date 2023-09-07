@@ -23,7 +23,7 @@ class CharacterDetailViewModel : ViewModel() {
         viewModelScope.launch {
             runCatching {
                 val character = repository.getCharacter(id)
-                delay(250)
+                delay(300)
                 _state.update { it.copy(character = character) }
             }.onFailure {
                 _state.update { it.copy(error = true) }

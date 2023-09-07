@@ -2,6 +2,7 @@ package com.dherediat97.rickandmorty.presentation.episode
 
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -53,7 +54,7 @@ fun Episodes(episodes: List<String>, viewModel: EpisodeListViewModel = koinViewM
                             .fillMaxHeight(0.60f))
                     Text(episode.episode, textAlign = TextAlign.End, modifier = Modifier
                         .fillMaxWidth()
-                        .padding(end = 12.dp))
+                        .padding(end = 12.dp, bottom = 8.dp))
                 }
 //                Card(modifier = Modifier
 //                    .fillMaxWidth()

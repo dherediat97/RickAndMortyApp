@@ -2,9 +2,9 @@ package com.dherediat97.rickandmorty.presentation.characterlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.dherediat97.rickandmorty.domain.repository.CharacterRepository
 import com.dherediat97.rickandmorty.domain.model.Character
-import kotlinx.coroutines.delay
+import com.dherediat97.rickandmorty.domain.repository.CharacterRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -17,17 +17,27 @@ class CharacterListViewModel : ViewModel() {
     val uiState: StateFlow<CharacterListUiState>
         get() = _state
 
+    private suspend fun fetchCharacters() {
+        runCatching {
+            _state.update { it.copy(isLoading = true) }
+            val characters = repository.getAllCharacters(page = _state.value.page)
+            _state.update { it.copy(characters = _state.value.characters + characters, isLoading = false) }
+        }.onFailure {
+            _state.update { it.copy(error = true) }
+        }
+    }
 
-    fun fetchCharacters(page: Int) {
-        _state.update { it.copy(isLoading = true) }
-        viewModelScope.launch {
-            runCatching {
-                val characters = repository.getAllCharacters(page)
-                delay(250)
-                _state.update { it.copy(characters = characters, isLoading = false) }
-            }.onFailure {
-                _state.update { it.copy(error = true, isLoading = false) }
+    fun fetchCharactersFirstTime() {
+        viewModelScope.launch(Dispatchers.IO) {
+            if (_state.value.characters.isEmpty()) {
+                fetchCharacters()
             }
+        }
+    }
+
+    fun fetchCharacterPaginated() {
+        viewModelScope.launch(Dispatchers.IO) {
+            fetchCharacters()
         }
     }
 
@@ -35,5 +45,7 @@ class CharacterListViewModel : ViewModel() {
         val characters: List<Character> = emptyList(),
         val isLoading: Boolean = false,
         val error: Boolean = false,
+        var page: Int = 1,
+        var isEndReached: Boolean = false
     )
 }

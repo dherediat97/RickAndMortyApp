@@ -63,8 +63,8 @@ fun ScaffoldPage() {
         topBar = {
             TopAppBar(
                 colors = topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onSecondary,
                 ),
                 title = {
                     Text("Rick & Morty")
@@ -77,10 +77,9 @@ fun ScaffoldPage() {
                             Icon(
                                 imageVector = Icons.Filled.ArrowBack,
                                 contentDescription = null,
+                                tint= MaterialTheme.colorScheme.onSecondary
                             )
                         }
-                    } else {
-                        null
                     }
                 }
             )
