@@ -66,6 +66,7 @@ dependencies {
     implementation(libs.koin.androidx.compose)
     implementation(libs.coil)
     implementation(libs.retrofit)
+    implementation(libs.okHttpLoggingInterceptor)
     implementation(libs.retrofitConverterGson)
     implementation(libs.lottie)
     testImplementation(libs.junit)

@@ -4,15 +4,14 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -96,24 +95,42 @@ fun ScaffoldPage(viewModel: CharacterListViewModel = koinViewModel()) {
             isParentView = it.destination.route == "/"
         }
     }
+    fun filterCharacter(selectedFilter: String) {
+        viewModel.searchUiState.value.characters = emptyList()
+        filterCharacter = FilterCharacter(byName = false, byStatus = false, bySpecies = false, byGender = false)
+        when (selectedFilter) {
+            FilterCharacterEnum.ByName.label -> filterCharacter.byName = true
+            FilterCharacterEnum.ByStatus.label -> filterCharacter.byStatus = true
+            FilterCharacterEnum.ByGender.label -> filterCharacter.byGender = true
+            FilterCharacterEnum.BySpecies.label -> filterCharacter.bySpecies = true
+        }
+        if (!filterCharacter.byName) {
+            viewModel.searchCharacter(
+                "",
+                if (filterCharacter.bySpecies) queryCharacter else "",
+                if (filterCharacter.byStatus) queryCharacter else "",
+                if (filterCharacter.byGender) queryCharacter else ""
+            )
+        } else {
+            viewModel.searchCharacter(
+                queryCharacter,
+                "",
+                "",
+                ""
+            )
+        }
+
+    }
     Scaffold(
         topBar = {
             if (isSearchBarActive) {
+                var selectedFilter by remember { mutableStateOf("") }
                 SearchBar(modifier = Modifier.fillMaxWidth(), query = queryCharacter, onQueryChange = {
                     queryCharacter = it
-                    viewModel.searchCharacter(
-                        if (filterCharacter.byName) queryCharacter else "",
-                        if (filterCharacter.bySpecies) queryCharacter else "",
-                        if (filterCharacter.byStatus) queryCharacter else "",
-                        if (filterCharacter.byGender) queryCharacter else ""
-                    )
+                    filterCharacter(selectedFilter)
                 }, onSearch = {
                     queryCharacter = it
-                    viewModel.searchCharacter(
-                        if (filterCharacter.byName) queryCharacter else "",
-                        if (filterCharacter.bySpecies) queryCharacter else "",
-                        if (filterCharacter.byStatus) queryCharacter else "",
-                        if (filterCharacter.byGender) queryCharacter else "")
+                    filterCharacter(selectedFilter)
                 }, active = isSearchBarActive, onActiveChange = {
                     isSearchBarActive = it
                 }, placeholder = {
@@ -130,24 +147,12 @@ fun ScaffoldPage(viewModel: CharacterListViewModel = koinViewModel()) {
                         data.characters = emptyList()
                     }, contentDescription = "Clear search query character")
                 }) {
-                    var selectedItem by remember { mutableStateOf(allFilters[0]) }
                     LazyRow(modifier = Modifier.fillMaxWidth()) {
                         items(allFilters) { filter ->
                             FilterChip(modifier = Modifier.padding(horizontal = 6.dp),
-                                selected = (filter == selectedItem), onClick = {
-                                    selectedItem = filter
-                                    filterCharacter = FilterCharacter()
-                                    when (selectedItem) {
-                                        FilterCharacterEnum.ByName.label -> filterCharacter.byName = true
-                                        FilterCharacterEnum.ByStatus.label -> filterCharacter.byStatus = true
-                                        FilterCharacterEnum.ByGender.label -> filterCharacter.byGender = true
-                                        FilterCharacterEnum.BySpecies.label -> filterCharacter.bySpecies = true
-                                    }
-                                    viewModel.searchCharacter(
-                                        if (filterCharacter.byName) queryCharacter else "",
-                                        if (filterCharacter.bySpecies) queryCharacter else "",
-                                        if (filterCharacter.byStatus) queryCharacter else "",
-                                        if (filterCharacter.byGender) queryCharacter else "")
+                                selected = (filter == selectedFilter), onClick = {
+                                    selectedFilter = filter
+                                    filterCharacter(selectedFilter)
                                 }, label = { Text(filter, fontSize = 10.sp) }, leadingIcon = {
                                     Icon(imageVector = when (filter) {
                                         FilterCharacterEnum.ByName.label -> Icons.Default.Abc
@@ -253,7 +258,9 @@ fun NavHost(
     NavHost(
         modifier = modifier,
         navController = navController,
-        startDestination = startDestination
+        startDestination = startDestination,
+        enterTransition = { EnterTransition.None },
+        exitTransition = { ExitTransition.None }
     ) {
         composable("/") {
             CharacterListScreen(
