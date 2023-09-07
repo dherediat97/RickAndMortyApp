@@ -1,5 +1,6 @@
 package com.dherediat97.rickandmorty.presentation.characterdetail
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dherediat97.rickandmorty.domain.model.Character
@@ -23,7 +24,7 @@ class CharacterDetailViewModel : ViewModel() {
         viewModelScope.launch {
             runCatching {
                 val character = repository.getCharacter(id)
-                _state.update { it.copy(character = character) }
+                _state.update { it.copy(character = character, characterName = character.name) }
             }.onFailure {
                 _state.update { it.copy(error = true) }
             }
@@ -35,6 +36,7 @@ class CharacterDetailViewModel : ViewModel() {
         val character: Character? = null,
         val isLoading: Boolean = false,
         val error: Boolean = false,
+        val characterName: String = ""
     )
 
 }

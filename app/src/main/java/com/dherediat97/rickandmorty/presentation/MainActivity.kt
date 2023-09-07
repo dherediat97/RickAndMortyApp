@@ -50,6 +50,9 @@ import com.dherediat97.rickandmorty.presentation.characterlist.CharacterCard
 import com.dherediat97.rickandmorty.presentation.characterlist.CharacterListScreen
 import com.dherediat97.rickandmorty.presentation.characterlist.CharacterListViewModel
 import com.dherediat97.rickandmorty.presentation.loading.LoadingComposableView
+import com.dherediat97.rickandmorty.ui.ScaleAndAlphaArgs
+import com.dherediat97.rickandmorty.ui.calculateDelayAndEasing
+import com.dherediat97.rickandmorty.ui.scaleAndAlpha
 import com.dherediat97.rickandmorty.ui.theme.PruebaTecnicaZaraTheme
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.component.KoinComponent
@@ -78,12 +81,13 @@ fun ScaffoldPage(viewModel: CharacterListViewModel = koinViewModel()) {
     val data by viewModel.searchUiState.collectAsState()
     val keyboardController = LocalSoftwareKeyboardController.current
     val listState = rememberLazyGridState()
-    var filterCharacter = FilterCharacter()
+    var filterCharacter: FilterCharacter
     val allFilters = listOf(FilterCharacterEnum.ByName.label,
         FilterCharacterEnum.ByStatus.label,
         FilterCharacterEnum.BySpecies.label,
         FilterCharacterEnum.ByGender.label
     )
+    var title by remember { mutableStateOf("Rick & Morty") }
 
 
     LaunchedEffect(Unit) {
@@ -92,9 +96,12 @@ fun ScaffoldPage(viewModel: CharacterListViewModel = koinViewModel()) {
 
     LaunchedEffect(navController.currentBackStackEntryFlow) {
         navController.currentBackStackEntryFlow.collect {
+            val characterName: String? = it.arguments?.getString("characterName")
             isParentView = it.destination.route == "/"
+            title = if (isParentView) "Rick & Morty" else "About $characterName"
         }
     }
+
     fun filterCharacter(selectedFilter: String) {
         viewModel.searchUiState.value.characters = emptyList()
         filterCharacter = FilterCharacter(byName = false, byStatus = false, bySpecies = false, byGender = false)
@@ -186,7 +193,8 @@ fun ScaffoldPage(viewModel: CharacterListViewModel = koinViewModel()) {
                                             character) {
                                             keyboardController?.hide()
 
-                                            navController.navigate("characterDetail/${character.id}") {
+                                            navController.navigate(
+                                                "characterDetail/characterId=${character.id}&characterName=${character.name.trim()}") {
                                                 isSearchBarActive = false
                                                 queryCharacter = ""
                                                 data.characters = emptyList()
@@ -213,7 +221,7 @@ fun ScaffoldPage(viewModel: CharacterListViewModel = koinViewModel()) {
                         titleContentColor = MaterialTheme.colorScheme.onSecondary,
                     ),
                     title = {
-                        Text("Rick & Morty")
+                        Text(title)
                     },
                     actions = {
                         Icon(
@@ -264,8 +272,8 @@ fun NavHost(
     ) {
         composable("/") {
             CharacterListScreen(
-                onNavigateCharacter = { characterId ->
-                    navController.navigate("characterDetail/$characterId") {
+                onNavigateCharacter = { characterId, characterName ->
+                    navController.navigate("characterDetail/characterId=$characterId&characterName=${characterName.trim()}") {
                         navController.graph.startDestinationRoute?.let { route ->
                             popUpTo(route) {
                                 saveState = true
@@ -277,7 +285,7 @@ fun NavHost(
                 },
             )
         }
-        composable("characterDetail/{characterId}",
+        composable("characterDetail/characterId={characterId}&characterName={characterName}",
             arguments = listOf(
                 navArgument("characterId") {
                     type = NavType.IntType

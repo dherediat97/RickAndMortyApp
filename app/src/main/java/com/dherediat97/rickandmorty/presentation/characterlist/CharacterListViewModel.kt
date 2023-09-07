@@ -48,7 +48,7 @@ class CharacterListViewModel : ViewModel() {
         }
     }
 
-    fun searchCharacter(name: String, specie: String, status: String, gender: String) {
+    fun searchCharacter(name: String = "", specie: String = "", status: String = "", gender: String = "") {
         viewModelScope.launch(Dispatchers.IO) {
             _searchState.update { it.copy(isLoading = true) }
             runCatching {

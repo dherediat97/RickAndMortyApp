@@ -1,7 +1,6 @@
-package com.dherediat97.rickandmorty.presentation
+package com.dherediat97.rickandmorty.ui
 
 import androidx.compose.animation.core.Easing
-import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.MutableTransitionState
@@ -9,15 +8,12 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 
 @Composable fun LazyGridState.calculateDelayAndEasing(index: Int, columnCount: Int): Pair<Int, Easing> {
     val row = index / columnCount
     val column = index % columnCount
-    val firstVisibleRow = remember { derivedStateOf { firstVisibleItemIndex } }
-    val visibleRows = layoutInfo.visibleItemsInfo.count()
     val easing =  LinearOutSlowInEasing
     return row + column to easing
 }

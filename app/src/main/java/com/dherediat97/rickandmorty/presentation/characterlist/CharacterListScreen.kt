@@ -18,17 +18,18 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import com.dherediat97.rickandmorty.presentation.ScaleAndAlphaArgs
-import com.dherediat97.rickandmorty.presentation.calculateDelayAndEasing
+import com.dherediat97.rickandmorty.ui.ScaleAndAlphaArgs
+import com.dherediat97.rickandmorty.ui.calculateDelayAndEasing
 import com.dherediat97.rickandmorty.presentation.error.ErrorComposableView
 import com.dherediat97.rickandmorty.presentation.loading.LoadingComposableView
-import com.dherediat97.rickandmorty.presentation.scaleAndAlpha
+import com.dherediat97.rickandmorty.ui.scaleAndAlpha
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
-fun CharacterListScreen(viewModel: CharacterListViewModel = koinViewModel(), onNavigateCharacter: (Int) -> Unit) {
+fun CharacterListScreen(viewModel: CharacterListViewModel = koinViewModel(),
+                        onNavigateCharacter: (Int, String) -> Unit) {
     val data by viewModel.uiState.collectAsState()
     val listState = rememberLazyGridState()
 
@@ -58,7 +59,7 @@ fun CharacterListScreen(viewModel: CharacterListViewModel = koinViewModel(), onN
                 val args = ScaleAndAlphaArgs(fromScale = 2f, toScale = 1f, fromAlpha = 0f, toAlpha = 1f)
                 val (scale, alpha) = scaleAndAlpha(args = args, animation = animation)
                 CharacterCard(modifier = Modifier.graphicsLayer(alpha = alpha, scaleX = scale, scaleY = scale), character) {
-                    onNavigateCharacter(character.id)
+                    onNavigateCharacter(character.id, character.name)
                 }
             }
         })
