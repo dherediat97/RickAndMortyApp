@@ -53,7 +53,7 @@ import com.dherediat97.rickandmorty.presentation.loading.LoadingComposableView
 import com.dherediat97.rickandmorty.ui.ScaleAndAlphaArgs
 import com.dherediat97.rickandmorty.ui.calculateDelayAndEasing
 import com.dherediat97.rickandmorty.ui.scaleAndAlpha
-import com.dherediat97.rickandmorty.ui.theme.PruebaTecnicaZaraTheme
+import com.dherediat97.rickandmorty.ui.theme.RickAndMortyAppTheme
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.component.KoinComponent
 
@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity(), KoinComponent {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            PruebaTecnicaZaraTheme {
+            RickAndMortyAppTheme {
                 ScaffoldPage()
             }
         }
