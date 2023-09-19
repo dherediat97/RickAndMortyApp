@@ -3,4 +3,5 @@
     <color name="primary">#FF97ce4c</color>
     <color name="secondary">#FFf0e14a</color>
     <color name="tertiary">#FFe4a788</color>
+    <color name="white">#ffffff</color>
 </resources>

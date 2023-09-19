@@ -1,6 +1,7 @@
 package com.dherediat97.rickandmorty.presentation
 
 import android.annotation.SuppressLint
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -35,6 +36,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -53,7 +56,7 @@ import com.dherediat97.rickandmorty.presentation.loading.LoadingComposableView
 import com.dherediat97.rickandmorty.ui.ScaleAndAlphaArgs
 import com.dherediat97.rickandmorty.ui.calculateDelayAndEasing
 import com.dherediat97.rickandmorty.ui.scaleAndAlpha
-import com.dherediat97.rickandmorty.ui.theme.PruebaTecnicaZaraTheme
+import com.dherediat97.rickandmorty.ui.theme.RickAndMortyAppTheme
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.component.KoinComponent
 
@@ -63,8 +66,8 @@ class MainActivity : ComponentActivity(), KoinComponent {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            PruebaTecnicaZaraTheme {
-                ScaffoldPage()
+            RickAndMortyAppTheme {
+                MainContainer()
             }
         }
     }
@@ -73,7 +76,7 @@ class MainActivity : ComponentActivity(), KoinComponent {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun ScaffoldPage(viewModel: CharacterListViewModel = koinViewModel()) {
+fun MainContainer(viewModel: CharacterListViewModel = koinViewModel()) {
     val navController: NavHostController = rememberNavController()
     var isParentView by remember { mutableStateOf(true) }
     var isSearchBarActive by remember { mutableStateOf(false) }
@@ -218,7 +221,7 @@ fun ScaffoldPage(viewModel: CharacterListViewModel = koinViewModel()) {
                 TopAppBar(
                     colors = topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primary,
-                        titleContentColor = MaterialTheme.colorScheme.onSecondary,
+                        titleContentColor = MaterialTheme.colorScheme.onPrimary,
                     ),
                     title = {
                         Text(title)
@@ -226,7 +229,7 @@ fun ScaffoldPage(viewModel: CharacterListViewModel = koinViewModel()) {
                     actions = {
                         Icon(
                             painter = rememberVectorPainter(image = Icons.Default.Search),
-                            tint = Color.Black,
+                            tint = MaterialTheme.colorScheme.onPrimary,
                             modifier = Modifier
                                 .padding(end = 8.dp)
                                 .clickable {
@@ -295,4 +298,10 @@ fun NavHost(
             backStackEntry.arguments?.getInt("characterId")?.let { CharacterDetailScreen(it) }
         }
     }
+}
+
+@Preview(device = "spec:width=1080px,height=1920px,dpi=480", showSystemUi = true, showBackground = true)
+@Composable
+fun AppPreview() {
+    MainContainer()
 }
