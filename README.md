@@ -39,7 +39,6 @@
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[linkedin-url]: https://linkedin.com/in/linkedin_username
 [product-screenshot]: product_screenshot.png
 [Android]: https://img.shields.io/badge/Android-0769AD?style=for-the-badge&logo=android&logoColor=white
 [Kotlin]: https://img.shields.io/badge/kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white
