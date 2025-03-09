@@ -1,6 +1,8 @@
 package com.dherediat97.rickandmorty.domain.model
 
-data class ResponseGetAllCharacters(
+data class ResponseGetAll<T>(
     val info: Info,
-    val results: List<Character>
-)
+    val results: List<T>
+) {
+    constructor() : this(Info(), emptyList())
+}

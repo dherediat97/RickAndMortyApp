@@ -1,6 +1,18 @@
 package com.dherediat97.rickandmorty.domain.model
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Character(
+    val id: Int,
+    val name: String,
+    val image: String,
+) {
+    constructor() : this(0, "", "")
+}
+
+@Serializable
+data class CharacterInfo(
     val id: Int,
     val name: String,
     val status: String,
@@ -10,5 +22,19 @@ data class Character(
     val image: String,
     val origin: Location,
     val location: Location,
-    val episode: List<String>
-)
+    val episodes: List<String>
+) {
+    constructor() : this(
+        0,
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        Location(),
+        Location(),
+        emptyList()
+    )
+}
+
