@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RickMortyApp</string>
+    <string name="error_message">Rick &amp; Morty Character missing…</string>
+    <string name="loading_message">Wubba lubba dub-dub</string>
 </resources>

@@ -1,20 +1,25 @@
 package com.dherediat97.rickandmorty.data.network
 
 import com.dherediat97.rickandmorty.domain.model.Character
+import com.dherediat97.rickandmorty.domain.model.CharacterInfo
 import com.dherediat97.rickandmorty.domain.model.Episode
-import com.dherediat97.rickandmorty.domain.model.ResponseGetAllCharacters
+import com.dherediat97.rickandmorty.domain.model.ResponseGetAll
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface RickMortyApiService {
     @GET("character")
-    suspend fun getAllCharacters(@Query("page")
-                                 page: Int): ResponseGetAllCharacters
+    suspend fun getAllCharacters(
+        @Query("page")
+        page: Int
+    ): ResponseGetAll<Character>
 
     @GET("character/{id}")
-    suspend fun getCharacter(@Path("id")
-                             id: Int): Character
+    suspend fun getCharacterInfo(
+        @Path("id")
+        id: Int
+    ): CharacterInfo
 
     @GET("character")
     suspend fun searchCharacter(
@@ -26,13 +31,8 @@ interface RickMortyApiService {
         status: String,
         @Query("gender")
         gender: String,
-    ): ResponseGetAllCharacters
+    ): ResponseGetAll<Character>
 
-    @GET("episode/{episodes}")
-    suspend fun getEpisodes(@Path("episodes")
-                            episodes: String): List<Episode>
-
-    @GET("episode/{episode}")
-    suspend fun getEpisode(@Path("episode")
-                           episode: String): Episode
+    @GET("episode")
+    suspend fun getEpisodes(): ResponseGetAll<Episode>
 }
