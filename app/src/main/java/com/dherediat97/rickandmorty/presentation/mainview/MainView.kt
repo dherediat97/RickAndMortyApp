@@ -15,7 +15,10 @@ import com.dherediat97.rickandmorty.presentation.navhost.NavHostView
 @Composable
 fun MainView(navHostController: NavHostController) {
     Scaffold(topBar = {
-        TopAppBarView(onBackAction = {}) {
+        TopAppBarView(onBackAction = {
+            navHostController.navigate(NavigationItem.Home.route) {
+            }
+        }) {
             navHostController.navigate(NavigationItem.SearchCharacter.route)
         }
     }) { innerPadding ->

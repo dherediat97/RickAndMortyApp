@@ -18,6 +18,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.dherediat97.rickandmorty.domain.model.CharacterInfo
+import com.dherediat97.rickandmorty.domain.model.CharacterStatus
+import com.dherediat97.rickandmorty.ui.theme.GreenColor
+import com.dherediat97.rickandmorty.ui.theme.GreyColor
+import com.dherediat97.rickandmorty.ui.theme.RedColor
 
 
 @Composable
@@ -44,12 +48,14 @@ fun CharacterDetailView(characterDetailViewModel: CharacterDetailViewModel) {
                     .padding(top = 8.dp, bottom = 16.dp),
                 style = TextStyle(
                     fontSize = 35.sp, fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = when (characterInfo.status) {
+                        CharacterStatus.Alive.name -> GreenColor
+                        CharacterStatus.Dead.name -> RedColor
+                        else -> GreyColor
+                    }
                 ),
                 textAlign = TextAlign.Center
             )
-
-            Text(text = "Status: " + characterInfo.status)
             Text(text = "Gender: " + characterInfo.gender)
             Text(text = "Species: " + characterInfo.species)
             Text(text = "Location: " + characterInfo.location.name)

@@ -7,8 +7,9 @@ data class Character(
     val id: Int,
     val name: String,
     val image: String,
+    val status: String,
 ) {
-    constructor() : this(0, "", "")
+    constructor() : this(0, "", "",CharacterStatus.unknown.name)
 }
 
 @Serializable
@@ -27,7 +28,7 @@ data class CharacterInfo(
     constructor() : this(
         0,
         "",
-        "",
+        CharacterStatus.unknown.name,
         "",
         "",
         "",

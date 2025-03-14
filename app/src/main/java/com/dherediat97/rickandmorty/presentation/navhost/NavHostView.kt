@@ -29,13 +29,7 @@ fun NavHostView(
             CharacterListView(
                 characterListViewModel = koinViewModel(),
                 onNavigateCharacter = { character ->
-                    navController.navigate(
-                        Character(
-                            id = character.id,
-                            image = character.image,
-                            name = character.name,
-                        )
-                    )
+                    navController.navigate(character)
                 },
             )
         }
