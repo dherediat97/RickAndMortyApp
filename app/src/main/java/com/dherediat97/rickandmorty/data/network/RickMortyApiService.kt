@@ -3,7 +3,7 @@ package com.dherediat97.rickandmorty.data.network
 import com.dherediat97.rickandmorty.domain.model.Character
 import com.dherediat97.rickandmorty.domain.model.CharacterInfo
 import com.dherediat97.rickandmorty.domain.model.Episode
-import com.dherediat97.rickandmorty.domain.model.ResponseGetAll
+import com.dherediat97.rickandmorty.domain.model.ResponsePaginate
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -13,7 +13,7 @@ interface RickMortyApiService {
     suspend fun getAllCharacters(
         @Query("page")
         page: Int
-    ): ResponseGetAll<Character>
+    ): ResponsePaginate<Character>
 
     @GET("character/{id}")
     suspend fun getCharacterInfo(
@@ -31,8 +31,8 @@ interface RickMortyApiService {
         status: String,
         @Query("gender")
         gender: String,
-    ): ResponseGetAll<Character>
+    ): ResponsePaginate<Character>
 
     @GET("episode")
-    suspend fun getEpisodes(): ResponseGetAll<Episode>
+    suspend fun getEpisodes(): ResponsePaginate<Episode>
 }

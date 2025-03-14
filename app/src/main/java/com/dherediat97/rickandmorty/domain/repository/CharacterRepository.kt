@@ -3,14 +3,14 @@ package com.dherediat97.rickandmorty.domain.repository
 import com.dherediat97.rickandmorty.data.network.RetrofitInstance
 import com.dherediat97.rickandmorty.domain.model.Character
 import com.dherediat97.rickandmorty.domain.model.CharacterInfo
-import com.dherediat97.rickandmorty.domain.model.ResponseGetAll
+import com.dherediat97.rickandmorty.domain.model.ResponsePaginate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class CharacterRepository {
     private val rickMortyApiService = RetrofitInstance.rickMortyApiService
 
-    fun getAllCharacters(page: Int): Flow<ResponseGetAll<Character>> = flow {
+    fun getAllCharacters(page: Int): Flow<ResponsePaginate<Character>> = flow {
         emit(rickMortyApiService.getAllCharacters(page))
     }
 
